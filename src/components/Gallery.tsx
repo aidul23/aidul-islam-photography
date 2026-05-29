@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { galleryImageSrc } from "@/lib/images";
 
 type Photo = {
   src: string;
@@ -6,6 +7,8 @@ type Photo = {
   title: string;
   category: string;
   /** Tailwind aspect class, e.g. aspect-[16/9]. Omit to use category defaults (Landscape → wide). */
+  /** Optional custom thumb URL; otherwise /images/thumbs/{name}.webp */
+  thumb?: string;
   aspect?: string;
 };
 
@@ -26,9 +29,12 @@ function GalleryThumbnail({
   imgClassName: string;
 }) {
   const [status, setStatus] = useState<ImageLoadStatus>("loading");
+  const [useFullSrc, setUseFullSrc] = useState(false);
+  const previewSrc = useFullSrc ? photo.src : galleryImageSrc(photo);
 
   useEffect(() => {
     setStatus("loading");
+    setUseFullSrc(false);
   }, [photo.src]);
 
   return (
@@ -37,7 +43,7 @@ function GalleryThumbnail({
         <div className="gallery-img-loading-overlay" aria-hidden />
       )}
       <img
-        src={photo.src}
+        src={previewSrc}
         alt={photo.alt}
         className={[
           imgClassName,
@@ -48,7 +54,14 @@ function GalleryThumbnail({
         loading="lazy"
         decoding="async"
         onLoad={() => setStatus("loaded")}
-        onError={() => setStatus("error")}
+        onError={() => {
+          if (!useFullSrc) {
+            setUseFullSrc(true);
+            setStatus("loading");
+            return;
+          }
+          setStatus("error");
+        }}
       />
     </div>
   );
@@ -198,6 +211,25 @@ const Gallery = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [activePhotoIndex, filteredPhotos.length]);
+
+  useEffect(() => {
+    if (activePhotoIndex === null) return;
+
+    const prefetch = (index: number) => {
+      const photo = filteredPhotos[index];
+      if (!photo) return;
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.as = "image";
+      link.href = photo.src;
+      document.head.appendChild(link);
+    };
+
+    prefetch((activePhotoIndex + 1) % filteredPhotos.length);
+    prefetch(
+      (activePhotoIndex - 1 + filteredPhotos.length) % filteredPhotos.length
+    );
+  }, [activePhotoIndex, filteredPhotos]);
 
   return (
     <section id="work" className="px-6 md:px-12 lg:px-20 py-24 md:py-32">

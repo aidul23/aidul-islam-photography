@@ -24,6 +24,16 @@ The gallery reads data from `public/data/photos.json`.
 3. Commit and push to Git.
 4. Render redeploys automatically (see below).
 
+### Faster image loading
+
+Original photos in `public/images/` are often very large (multi‑MB). Before deploying, generate WebP thumbnails:
+
+```bash
+npm run images:optimize
+```
+
+This creates `public/images/thumbs/` (gallery uses these; the lightbox still opens full-size originals). **Commit the `thumbs/` folder** so Render serves small files. Re-run the command whenever you add new photos.
+
 ## Deploy on Render
 
 This project is configured for [Render](https://render.com) static hosting via `render.yaml`.

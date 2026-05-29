@@ -1,11 +1,25 @@
+import { useState } from "react";
+import { toThumbPath } from "@/lib/images";
+
+const COVER_FULL = "/images/cover.JPG";
+const COVER_PREVIEW = toThumbPath(COVER_FULL);
+
 const Hero = () => {
+  const [coverSrc, setCoverSrc] = useState(COVER_PREVIEW);
+
   return (
     <section className="relative min-h-screen flex flex-col justify-end pb-16 pt-28 md:pb-24 px-6 md:px-12 lg:px-20">
       <div className="absolute inset-0">
         <img
-          src="/images/cover.JPG"
+          src={coverSrc}
           alt="Misty mountain landscape at dawn"
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          onError={() => {
+            if (coverSrc !== COVER_FULL) setCoverSrc(COVER_FULL);
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/35 to-black/10" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/20 via-black/10 to-transparent" />
