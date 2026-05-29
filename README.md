@@ -45,7 +45,7 @@ This project is configured for [Render](https://render.com) static hosting via `
 
 ### After deploy
 
-- Site URL: `https://work-portfolio.onrender.com` (or the name you chose).
+- Site URL: `https://aidulislamphotography.onrender.com` (matches the service name in `render.yaml`; Render may add a suffix if the name is taken globally).
 - Optional: add a custom domain under **Settings → Custom Domains**.
 
 ### Updating the live site

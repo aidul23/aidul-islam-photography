@@ -2,7 +2,7 @@
 # After pushing to GitHub: Render Dashboard → New → Blueprint → connect this repo.
 services:
   - type: web
-    name: work-portfolio
+    name: aidulislamphotography
     runtime: static
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
