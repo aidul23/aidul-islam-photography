@@ -78,10 +78,10 @@ function LightboxImage({ src, alt }: { src: string; alt: string }) {
   }, [src]);
 
   return (
-    <div className="relative flex max-h-full max-w-full items-center justify-center">
+    <div className="relative inline-flex items-center justify-center">
       {status === "loading" && (
         <div
-          className="gallery-img-loading-ripple absolute inset-0 min-h-[50vh] min-w-[min(90vw,48rem)] max-w-full rounded-sm"
+          className="gallery-img-loading-ripple h-[50vh] w-[min(90vw,48rem)] rounded-sm"
           aria-hidden
         />
       )}
@@ -89,8 +89,8 @@ function LightboxImage({ src, alt }: { src: string; alt: string }) {
         src={src}
         alt={alt}
         className={[
-          "relative z-[1] max-h-full max-w-full object-contain transition-opacity duration-300",
-          status === "loaded" ? "opacity-100" : "opacity-0",
+          "relative z-[1] block h-auto w-auto max-h-[85vh] max-w-[min(90vw,72rem)] object-contain transition-opacity duration-300",
+          status === "loaded" ? "opacity-100" : "absolute opacity-0",
         ].join(" ")}
         decoding="async"
         fetchPriority="high"
@@ -316,7 +316,7 @@ const Gallery = () => {
 
       {activePhoto && (
         <div
-          className="fixed inset-0 z-[70] bg-black/90 p-4 md:p-8"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 p-4 md:p-8"
           role="dialog"
           aria-modal="true"
           aria-label={`Preview image ${activePhoto.title}`}
@@ -360,10 +360,7 @@ const Gallery = () => {
             &#8250;
           </button>
 
-          <div
-            className="mx-auto flex h-full max-w-6xl items-center justify-center"
-            onClick={(event) => event.stopPropagation()}
-          >
+          <div onClick={(event) => event.stopPropagation()}>
             <LightboxImage src={activePhoto.src} alt={activePhoto.alt} />
           </div>
         </div>
